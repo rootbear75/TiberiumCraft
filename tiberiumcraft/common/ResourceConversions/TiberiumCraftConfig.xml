@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<TiberiumConfig name="Default Config" authors="Dallas,Rootbear75,FireStormOOO" version="2" replaceIfInvalid="false" replaceIfInternalNewer="false">
+	<!-- Recent Changes in Version 2:
+			=Added attribute BlockValues.Block.replaceWithName that defines
+				the block to use when tiberium depletes this resource -FireStorm
+			=Added two whitelists and a blacklist that help with tiberium placement and spread
+				- Finished initial whitelist/blacklist with proper 1.6.4 IDs and 1.7.2 names for ease of transition
+						into 1.7.2 environment (10/31 - 4PM PDT ~~Rootbear)
+				- TODO: Add support for mod items to the XML; an extension to this format will be required;
+						do NOT try to add mod items to this just yet, it will either crash, or just not work.
+						They can be added in a comment if nessisary for completeness. - FireStorm
+			=Added attribute in root that tells the game if it should replace this config if it can't be loaded
+				Should be true for release versions, false for player modified or debug versions - FireStorm
+			=Added attribute that tells the program to check for a newer internal version and replace if found
+				True except for debug or modified versions - FireStorm
+	-->	
+	<OutDefs count="12">
+	<!-- Defines possible outputs of the tiberium -->
+		<OutputDef defID="0" minecraftItemName="minecraft:iron_ingot" minecraftID="265"></OutputDef>
+		<!--OreDictionary is a special tag that tells the mod to search the ore dictionary for that item
+		Use -1 as the minecraftID for N/A-->
+		<OutputDef defID="1" minecraftItemName="ore_dictionary:copper_ingot" minecraftID="-1"></OutputDef>
+		<OutputDef defID="2" minecraftItemName="minecraft:gold_ingot" minecraftID="266"></OutputDef>
+		<!--Internal Specifies that the resource output handling should be hardcoded-->
+		<OutputDef defID="3" minecraftItemName="internal:biomass" minecraftID="-1"></OutputDef>
+		<OutputDef defID="4" minecraftItemName="ore_dictionary:tin_ingot" minecraftID="-1"></OutputDef>
+		<OutputDef defID="5" minecraftItemName="ore_dictionary:silver_ingot" minecraftID="-1"></OutputDef>
+		<OutputDef defID="6" minecraftItemName="ore_dictionary:lead_ingot" minecraftID="-1"></OutputDef>
+		<!--LiquidRegistry tells the game to try to use the Forge LiquidRegistry to output a gas
+		or liquid into pipes-->
+		<OutputDef defID="7" minecraftItemName="liquid_registry:oxygen_gas" minecraftID="-1"></OutputDef>
+		<OutputDef defID="8" minecraftItemName="internal:carbon" minecraftID="-1"></OutputDef>
+		<OutputDef defID="9" minecraftItemName="ore_dictionary:titanium_ingot" minecraftID="-1"></OutputDef>
+		<OutputDef defID="10" minecraftItemName="ore_dictionary:aluminum_ingot" minecraftID="-1"></OutputDef>
+		<OutputDef defID="11" minecraftItemName="minecraft:dye:4" minecraftID="351:4"></OutputDef> 
+		<!-- (Rootbear):
+				from talks with Soaryn, i've come to believe this will be the internal representation of Lapis Lazuli
+				It will probably be that.... but it COULD be "minecraft:lapis_lazuli"
+				we won't know until we test it or until a dev environment is made for 1.7.2 
+				~~ Rootbear (10/31 @ 415p GMT-7)
+				
+				Also, look into the Ore Dictionary class to see how we can get the items.
+				Most likely it will have to be an internal item, and then hard code a lookup
+				into the ore dictionary to get tin, or w/e else.
+			(FireStorm):
+				I already looked into the Ore Dictionary.  I'm litterally going to ask the dictionary "is this string registered"
+				If it finds one or more items/blocks with that name (IE: the part after the ':'), I'll pick one, likely the first,
+				and use that.
+				-->
+	</OutDefs>
+	
+	<ResDefs count="11">
+	<!-- Internal representation of a resource in Tiberium -->
+		<ResourceDef defID="0" outDefList="1" internalName="Copper"
+			displayName="Copper" outConversions="1"></ResourceDef>
+		<ResourceDef defID="1" outDefList="2" internalName="Gold"
+			displayName="Gold" outConversions="1"></ResourceDef>
+		<ResourceDef defID="2" outDefList="8" internalName="Carbon"
+			displayName="Carbon" outConversions="1"></ResourceDef>
+		<ResourceDef defID="3" outDefList="4" internalName="Tin"
+			displayName="Tin" outConversions="1"></ResourceDef>
+		<ResourceDef defID="4" outDefList="5" internalName="Silver"
+			displayName="Silver" outConversions="1"></ResourceDef>
+		<ResourceDef defID="5" outDefList="6" internalName="Lead"
+			displayName="Lead" outConversions="1"></ResourceDef>
+		<ResourceDef defID="6" outDefList="3" internalName="BioMass"
+			displayName="Biomass" outConversions="1"></ResourceDef>
+		<ResourceDef defID="7" outDefList="10" internalName="Aluminum"
+			displayName="Aluminum" outConversions="1"></ResourceDef>
+		<ResourceDef defID="8" outDefList="9" internalName="Titanium"
+			displayName="Titanium" outConversions="1"></ResourceDef>
+		<ResourceDef defID="9" outDefList="0" internalName="Iron"
+			displayName="Iron" outConversions="1"></ResourceDef>
+		<ResourceDef defID="10" outDefList="11" internalName="LapisLazuli"
+			displayName="Lapis Lazuli" outConversions="6"></ResourceDef>
+	</ResDefs>
+
+	<BlockValues count="10">
+		<!-- Converts a block ID that Tiberium attempts to absorb, into an internal resource value -->
+		<!--defID is an internal Identifier, the name is the 1.7 minecraft accessor, ID is the 1.6 and earlier ID number-->
+		<!--replaceWith tag is optional; defaults to TiberiumCraft:TiberiumStone; determine what the block changes to on destruction by TB-->
+		<Block defID="0" minecraftName="minecraft:stone" minecraftID="1" replaceWithName="TiberiumCraft:TiberiumStone">
+			<!--resDefID refers to the resource defined in the first section ResDefs-->
+			<!--outDefID refers to the output item defined in the second section OutDefs-->
+			<!--absorbValue is added to the Tiberium's resource content every time it absorbs this block type-->
+			<ResourceContent resDefID="9" absorbValue="0.013"></ResourceContent>
+			<ResourceContent resDefID="1" absorbValue="0.001437"></ResourceContent>
+			<ResourceContent resDefID="2" absorbValue="0.02"></ResourceContent>
+			<ResourceContent resDefID="10" absorbValue="0.001013"></ResourceContent>
+		</Block>
+		<Block defID="1" minecraftName="minecraft:iron_ore" minecraftID="15">
+			<ResourceContent resDefID="9" absorbValue="1.0"></ResourceContent>
+		</Block>
+		<Block defID="2" minecraftName="ore_dictonary:copper_ore" minecraftID="-1">
+			<ResourceContent resDefID="0" absorbValue="1.0"></ResourceContent>
+		</Block>
+		<Block defID="3" minecraftName="minecraft:gold_ore" minecraftID="14">
+			<ResourceContent resDefID="2" absorbValue="1.0"></ResourceContent>
+		</Block>
+		<Block defID="4" minecraftName="minecraft:coal_ore" minecraftID="16">
+			<ResourceContent resDefID="2" absorbValue="1"></ResourceContent>
+		</Block>
+		<Block defID="5" minecraftName="minecraft:diamond_ore" minecraftID="56">
+			<ResourceContent resDefID="2" absorbValue="64"></ResourceContent>
+		</Block>
+		<Block defID="6" minecraftName="ore_dictonary:tin_ore" minecraftID="-1">
+			<ResourceContent resDefID="3" absorbValue="1.0"></ResourceContent>
+		</Block>
+		<Block defID="7" minecraftName="ore_dictonary:silver_ore" minecraftID="-1">
+			<ResourceContent resDefID="4" absorbValue="1.0"></ResourceContent>
+		</Block>
+		<Block defID="8" minecraftName="ore_dictonary:lead_ore" minecraftID="-1">
+			<ResourceContent resDefID="5" absorbValue="1.0"></ResourceContent>
+		</Block>
+		<Block defID="9" minecraftName="minecraft:lapis_ore" minecraftID="21">
+			<ResourceContent resDefID="10" absorbValue="1.0"></ResourceContent>
+		</Block>
+	</BlockValues>
+
+	<WhiteAndBlackLists>
+		<!--List of blocks tiberium should be able to destroy and replace with itself-->
+		<Replacable type="whitelist">
+			<LBlock minecraftID="0" minecraftName="minecraft:air"></LBlock>
+			<LBlock minecraftID="6" minecraftName="minecraft:sapling"></LBlock>
+			<LBlock minecraftID="27" minecraftName="minecraft:golden_rail"></LBlock>
+			<LBlock minecraftID="28" minecraftName="minecraft:detector_rail"></LBlock>
+			<LBlock minecraftID="30" minecraftName="minecraft:web"></LBlock>
+			<LBlock minecraftID="31:1" minecraftName="minecraft:tallgrass"></LBlock>
+			<LBlock minecraftID="32" minecraftName="minecraft:deadbush"></LBlock>
+			<LBlock minecraftID="35" minecraftName="minecraft:wool"></LBlock>
+			<LBlock minecraftID="37" minecraftName="minecraft:yellow_flower"></LBlock>
+			<LBlock minecraftID="38" minecraftName="minecraft:red_flower"></LBlock>
+			<LBlock minecraftID="39" minecraftName="minecraft:brown_mushroom"></LBlock>
+			<LBlock minecraftID="40" minecraftName="minecraft:red_mushroom"></LBlock>
+			<LBlock minecraftID="50" minecraftName="minecraft:torch"></LBlock>
+			<LBlock minecraftID="51" minecraftName="minecraft:fire"></LBlock>
+			<LBlock minecraftID="55" minecraftName="minecraft:redstone_wire"></LBlock>
+			<LBlock minecraftID="59" minecraftName="minecraft:wheat"></LBlock>
+			<LBlock minecraftID="63" minecraftName="minecraft:standing_sign"></LBlock>
+			<LBlock minecraftID="65" minecraftName="minecraft:ladder"></LBlock>
+			<LBlock minecraftID="66" minecraftName="minecraft:rail"></LBlock>
+			<LBlock minecraftID="68" minecraftName="minecraft:wall_sign"></LBlock>
+			<LBlock minecraftID="69" minecraftName="minecraft:lever"></LBlock>
+			<LBlock minecraftID="70" minecraftName="minecraft:stone_pressure_plate"></LBlock>
+			<LBlock minecraftID="71" minecraftName="minecraft:doorIron"></LBlock>
+			<LBlock minecraftID="72" minecraftName="minecraft:wooden_pressure_plate"></LBlock>
+			<LBlock minecraftID="75" minecraftName="minecraft:unlit_redstone_torch"></LBlock>
+			<LBlock minecraftID="76" minecraftName="minecraft:redstong_torch"></LBlock>
+			<LBlock minecraftID="77" minecraftName="minecraft:stone_button"></LBlock>
+			<LBlock minecraftID="78" minecraftName="minecraft:snow_layer"></LBlock>
+			<LBlock minecraftID="80" minecraftName="minecraft:snow"></LBlock>
+			<LBlock minecraftID="83" minecraftName="minecraft:reeds"></LBlock>
+			<LBlock minecraftID="85" minecraftName="minecraft:fence"></LBlock>
+			<LBlock minecraftID="86" minecraftName="minecraft:pumpkin"></LBlock>
+			<LBlock minecraftID="91" minecraftName="minecraft:lit_pumpkin"></LBlock>
+			<LBlock minecraftID="92" minecraftName="minecraft:cake"></LBlock>
+			<LBlock minecraftID="93" minecraftName="minecraft:unpowered_repeater"></LBlock>
+			<LBlock minecraftID="94" minecraftName="minecraft:powered_repeater"></LBlock>
+			<LBlock minecraftID="101" minecraftName="minecraft:iron_bars"></LBlock>
+			<LBlock minecraftID="102" minecraftName="minecraft:glass_pane"></LBlock>
+			<LBlock minecraftID="103" minecraftName="minecraft:melon_block"></LBlock>
+			<LBlock minecraftID="104" minecraftName="minecraft:pumpkin_stem"></LBlock>
+			<LBlock minecraftID="105" minecraftName="minecraft:melon_stem"></LBlock>
+			<LBlock minecraftID="106" minecraftName="minecraft:vine"></LBlock>
+			<LBlock minecraftID="107" minecraftName="minecraft:fence_gate"></LBlock>
+			<LBlock minecraftID="113" minecraftName="minecraft:nether_brick_fence"></LBlock>
+			<LBlock minecraftID="115" minecraftName="minecraft:nether_wart"></LBlock>
+			<LBlock minecraftID="127" minecraftName="minecraft:cocoa"></LBlock>
+			<LBlock minecraftID="131" minecraftName="minecraft:tripwire_hook"></LBlock>
+			<LBlock minecraftID="132" minecraftName="minecraft:tripWire"></LBlock>
+			<LBlock minecraftID="139" minecraftName="minecraft:cobblestone_wall"></LBlock>
+			<LBlock minecraftID="140" minecraftName="minecraft:flower_pot"></LBlock>
+			<LBlock minecraftID="141" minecraftName="minecraft:carrots"></LBlock>
+			<LBlock minecraftID="142" minecraftName="minecraft:potatoes"></LBlock>
+			<LBlock minecraftID="143" minecraftName="minecraft:wooden_button"></LBlock>
+			<LBlock minecraftID="144" minecraftName="minecraft:skull"></LBlock>
+			<LBlock minecraftID="147" minecraftName="minecraft:light_weighted_pressure_plate"></LBlock>
+			<LBlock minecraftID="148" minecraftName="minecraft:heavy_weighted_pressure_plate"></LBlock>
+			<LBlock minecraftID="149" minecraftName="minecraft:unpowered_comparator"></LBlock>
+			<LBlock minecraftID="151" minecraftName="minecraft:daylight_detector"></LBlock>
+			<LBlock minecraftID="157" minecraftName="minecraft:activator_rail"></LBlock>
+			<LBlock minecraftID="171" minecraftName="minecraft:carpet"></LBlock>
+			
+			<!-- Blocks are not implemented until 1.7.2		
+				<LBlock minecraftID="175" minecraftName="minecraft:double_plant"></LBlock>
+			-->
+			
+			
+		</Replacable>
+		<!--List of tansparent blocks tiberium should be able to spawn on top of
+		(Trasparent blocks not on this list are not legal for TB to sit on)-->
+		<PlaceOnTopTransparent type="whitelist">
+			<LBlock minecraftID="53" minecraftName="minecraft:oak_stairs"></LBlock>
+			<LBlock minecraftID="60" minecraftName="minecraft:farmland"></LBlock>
+			<LBlock minecraftID="67" minecraftName="minecraft:stone_stairs"></LBlock>
+			<LBlock minecraftID="108" minecraftName="minecraft:brick_stairs"></LBlock>
+			<LBlock minecraftID="109" minecraftName="minecraft:stone_brick_stairs"></LBlock>
+			<LBlock minecraftID="114" minecraftName="minecraft:nether_brick_stairs"></LBlock>
+			<LBlock minecraftID="126" minecraftName="minecraft:wooden_slab"></LBlock>
+			<LBlock minecraftID="128" minecraftName="minecraft:sandstone_stairs"></LBlock>
+			<LBlock minecraftID="134" minecraftName="minecraft:spruce_stairs"></LBlock>
+			<LBlock minecraftID="135" minecraftName="minecraft:birch_stairs"></LBlock>
+			<LBlock minecraftID="136" minecraftName="minecraft:jungle_stairs"></LBlock>
+			<LBlock minecraftID="154" minecraftName="minecraft:hopper"></LBlock>
+			<LBlock minecraftID="156" minecraftName="minecraft:quartz_stairs"></LBlock>
+
+		<!-- Blocks are not implemented until 1.7.2
+			<LBlock minecraftID="163" minecraftName="minecraft:acacia_stairs"></LBlock>
+			<LBlock minecraftID="164" minecraftName="minecraft:dark_oak_stairs"></LBlock>
+		-->
+
+		</PlaceOnTopTransparent>
+		<!--List of non-transparent blocks tiberium should be prevented from spawning on
+		(solid blocks default to placable)-->
+		<PlaceOnTopSolid type="blacklist">
+			<LBlock minecraftID="7" minecraftName="minecraft:bedrock"></LBlock>
+			<LBlock minecraftID="8" minecraftName="minecraft:flowing_water"></LBlock>
+			<LBlock minecraftID="9" minecraftName="minecraft:water"></LBlock>
+			<LBlock minecraftID="10" minecraftName="minecraft:flowing_lava"></LBlock>
+			<LBlock minecraftID="11" minecraftName="minecraft:lava"></LBlock>
+			<LBlock minecraftID="25" minecraftName="minecraft:noteblock"></LBlock>
+			<LBlock minecraftID="29" minecraftName="minecraft:sticky_piston"></LBlock>
+			<LBlock minecraftID="33" minecraftName="minecraft:piston"></LBlock>
+			<LBlock minecraftID="33" minecraftName="minecraft:piston_head"></LBlock>			
+			<LBlock minecraftID="46" minecraftName="minecraft:tnt"></LBlock>
+			<LBlock minecraftID="47" minecraftName="minecraft:bookshelf"></LBlock>
+			<LBlock minecraftID="49" minecraftName="minecraft:obsidian"></LBlock>
+			<LBlock minecraftID="52" minecraftName="minecraft:mob_spawner"></LBlock>
+			<LBlock minecraftID="54" minecraftName="minecraft:chest"></LBlock>
+			<LBlock minecraftID="58" minecraftName="minecraft:crafting_table"></LBlock>
+			<LBlock minecraftID="61" minecraftName="minecraft:furnace"></LBlock>
+			<LBlock minecraftID="62" minecraftName="minecraft:lit_furnace"></LBlock>
+			<LBlock minecraftID="81" minecraftName="minecraft:cactus"></LBlock>
+			<LBlock minecraftID="84" minecraftName="minecraft:jukebox"></LBlock>
+			<LBlock minecraftID="89" minecraftName="minecraft:glowstone"></LBlock>
+			<LBlock minecraftID="97" minecraftName="minecraft:monster_egg"></LBlock>
+			<LBlock minecraftID="118" minecraftName="minecraft:cauldron"></LBlock>
+			<LBlock minecraftID="120" minecraftName="minecraft:end_portal_frame"></LBlock>
+			<LBlock minecraftID="121" minecraftName="minecraft:end_stone"></LBlock>
+			<LBlock minecraftID="122" minecraftName="minecraft:dragonEgg"></LBlock>
+			<LBlock minecraftID="123" minecraftName="minecraft:redstone_lamp"></LBlock>
+			<LBlock minecraftID="124" minecraftName="minecraft:lit_restone_lamp"></LBlock>
+			<LBlock minecraftID="130" minecraftName="minecraft:ender_chest"></LBlock>			
+			<LBlock minecraftID="137" minecraftName="minecraft:command_block"></LBlock>
+			<LBlock minecraftID="138" minecraftName="minecraft:beacon"></LBlock>
+			<LBlock minecraftID="145" minecraftName="minecraft:anvil"></LBlock>
+			<LBlock minecraftID="146" minecraftName="minecraft:trapped_chest"></LBlock>
+		
+		<!-- Blocks are not implemented until 1.7.2
+			<LBlock minecraftID="95" minecraftName="minecraft:stained_glass"></LBlock>
+			<LBlock minecraftID="174" minecraftName="minecraft:packed_ice"></LBlock>
+		-->
+		
+		</PlaceOnTopSolid>
+	</WhiteAndBlackLists>
+</TiberiumConfig>

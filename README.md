@@ -1,4 +1,4 @@
 TiberiumCraft
 =============
 
-Open Source mod for bringing Tiberium into Minecraft
+Minecraft mod featuring some content from Command &amp; Conquer
